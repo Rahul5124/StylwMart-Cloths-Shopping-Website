@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <link rel="icon" href="img/smlogo.png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: aliceblue;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            animation: slideInFromRight 0.5s ease-out;
+        }
+
+        @keyframes slideInFromRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        img {
+            width: 20%;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        img:hover {
+            transform: scale(1.03);
+        }
+
+        .details {
+            color: black;
+            padding: 20px;
+            background-color: lavender;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: 20px auto;
+            transition: 0.3s;
+            border: 0.2px solid darkgrey;
+        }
+
+        .details:hover {
+            background-color: lavenderblush;
+            transform: scale(1.003);
+            box-shadow: 6px 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn {
+            background: #f7b347;
+            color: black;
+            padding: 10px 15px;
+            border: none;
+            text-decoration: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 30px;
+            box-shadow: 6px 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:hover {
+            background: #e79208;
+            box-shadow: 6px 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            color: black;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            width: 300px;
+            text-align: left;
+        }
+
+        .popup input,
+        .popup select {
+            width: 90%;
+            margin: 10px 0;
+            padding: 8px;
+            border-radius: 10px;
+            box-shadow: 6px 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .popup button {
+            width: 100%;
+            padding: 10px;
+            background: #f39c12;
+            border: none;
+            cursor: pointer;
+            border-radius: 15px;
+        }
+
+        .popup button:hover {
+            background: #d68910;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+    <h2 style="color: black;" id="productName"></h2>
+    <img id="productImage" src="" alt="Product Image">
+    <div class="details">
+        <p><strong>Price:</strong> <span id="productPrice"></span></p>
+        <p><strong>Brand:</strong> <span id="productBrand"></span></p>
+        <p><strong>Size:</strong> <span id="productSize"></span></p>
+        <p><strong>Type:</strong> <span id="productType"></span></p>
+        <p><strong>Category:</strong> <span id="productCategory"></span></p>
+        <p><strong>Rating:</strong> <span id="productRating"></span></p>
+        <p><strong>Description:</strong> <span id="productDescription"></span></p>
+        <button class="btn" onclick="addToCart()">Add to Cart</button>
+        <button class="btn" onclick="showOrderPopup()">Order Now</button>
+        <a href="home.html" class="btn">Back to Home</a>
+    </div>
+
+    <div class="popup" id="orderPopup">
+        <h3>Enter Order Details</h3>
+        <input type="text" id="address" placeholder="Address">
+        <input type="text" id="city" placeholder="City">
+        <input type="text" id="pincode" placeholder="Pincode">
+        <select id="paymentMethod">
+            <option value="UPI">UPI</option>
+            <option value="Card">Card</option>
+        </select>
+        <button onclick="placeOrder()">Confirm Order</button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const params = new URLSearchParams(window.location.search);
+            const imageName = params.get("image");
+
+            if (imageName) {
+                document.getElementById("productImage").src = `img/${imageName}`;
+            } else {
+                document.getElementById("productImage").alt = "Image not found";
+            }
+
+            document.getElementById("productName").innerText = params.get("name") || "StyleMart";
+            document.getElementById("productPrice").innerText = params.get("price") || "399.00";
+            document.getElementById("productBrand").innerText = params.get("brand") || "StyleMart";
+            document.getElementById("productSize").innerText = params.get("size") || "XL";
+            document.getElementById("productType").innerText = params.get("type") || "All";
+            document.getElementById("productCategory").innerText = params.get("category") || "All";
+            document.getElementById("productRating").innerText = params.get("rating") || "*****";
+            document.getElementById("productDescription").innerText = params.get("description") || "Thank you For Using StyleMart";
+        });
+
+        function addToCart() {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            let product = {
+                name: document.getElementById("productName").innerText,
+                price: document.getElementById("productPrice").innerText,
+                image: new URLSearchParams(window.location.search).get("image")
+            };
+            cart.push(product);
+            localStorage.setItem("cart", JSON.stringify(cart));
+            alert("Product added to cart!");
+        }
+
+        function showOrderPopup() {
+            document.getElementById("orderPopup").style.display = "block";
+        }
+
+        function placeOrder() {
+            let address = document.getElementById("address").value;
+            let city = document.getElementById("city").value;
+            let pincode = document.getElementById("pincode").value;
+            let paymentMethod = document.getElementById("paymentMethod").value;
+
+            if (!address || !city || !pincode) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            let orders = JSON.parse(localStorage.getItem("orders")) || [];
+            let product = {
+                name: document.getElementById("productName").innerText,
+                price: document.getElementById("productPrice").innerText,
+                image: new URLSearchParams(window.location.search).get("image"),
+                address, city, pincode, paymentMethod
+            };
+            orders.push(product);
+            localStorage.setItem("orders", JSON.stringify(orders));
+            alert("Your order has been placed successfully!");
+            document.getElementById("orderPopup").style.display = "none";
+        }
+    </script>
+</body>
+
+</html>

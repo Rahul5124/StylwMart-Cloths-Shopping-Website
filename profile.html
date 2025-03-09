@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="icon" href="img/smlogo.png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: aliceblue;
+            color: black;
+            text-align: center;
+            padding: 20px;
+            animation: slideInFromRight 0.5s ease-out;
+        }
+
+        @keyframes slideInFromRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .profile-container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 6px 6px 20px rgba(0, 0, 0, 0.3);
+            text-align: left;
+        }
+
+        .profile-container:hover {
+            transform: scale(1.01);
+        }
+
+        .profile-image {
+            display: block;
+            margin: auto;
+            width: 184px;
+            height: 180px;
+            border-radius: 50%;
+            border: 2px solid #555;
+        }
+
+        .btn {
+            background: #f7b347;
+            color: black;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: block;
+            width: 120px;
+            text-align: center;
+            margin-left: 45%;
+            box-shadow: 6px 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:hover {
+            background: #e79208;
+        }
+
+        .profile-input {
+            width: 25%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: row;
+            margin-left: 37%;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .order-item img {
+            width: 50px;
+            border-radius: 5px;
+        }
+
+        .login-button {
+            color: brown;
+            font-size: 16px;
+            text-decoration: none;
+            margin-left: 95%;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="login.html" class="login-button">Logout</a>
+    <h2>User Profile</h2>
+    <img src="default-user.png" class="profile-image" id="profileImage">
+    <input type="file" id="uploadImage" class="profile-input" accept="image/*" onchange="changeProfileImage(event)">
+    <input type="text" class="profile-input" id="userName" placeholder="Full Name">
+    <input type="email" class="profile-input" id="userEmail" placeholder="Email">
+    <input type="text" class="profile-input" id="userAddress" placeholder="Shipping Address">
+    <button class="btn" id="profileBtn" onclick="toggleEditProfile()">Save Profile</button>
+    <button class="btn" id="profileBtn" onclick="location.href='home.html'" style="margin-bottom: 80px;">Back to
+        Home</button>
+    <hr>
+    <h3 class="section-title">Order History</h3>
+    <div id="orderHistory">No orders placed yet.</div>
+
+    <h3 class="section-title">Wishlist</h3>
+    <p>No items in wishlist.</p>
+
+
+
+
+    <script>
+        function toggleEditProfile() {
+            let name = document.getElementById("userName");
+            let email = document.getElementById("userEmail");
+            let address = document.getElementById("userAddress");
+            let uploadImage = document.getElementById("uploadImage");
+            let profileBtn = document.getElementById("profileBtn");
+
+            if (profileBtn.innerText === "Save Profile") {
+                if (!name.value || !email.value || !address.value) {
+                    alert("Please fill in all fields.");
+                    return;
+                }
+                name.disabled = true;
+                email.disabled = true;
+                address.disabled = true;
+                uploadImage.style.display = "none";
+                profileBtn.innerText = "Edit Profile";
+                alert("Profile saved successfully!");
+            } else {
+                name.disabled = false;
+                email.disabled = false;
+                address.disabled = false;
+                uploadImage.style.display = "block";
+                profileBtn.innerText = "Save Profile";
+            }
+        }
+
+        function changeProfileImage(event) {
+            let file = event.target.files[0];
+            if (file) {
+                let reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById("profileImage").src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+                document.getElementById("uploadImage").style.display = "none";
+            }
+        }
+
+        function loadOrders() {
+            let orders = JSON.parse(localStorage.getItem("orders")) || [];
+            let orderHistory = document.getElementById("orderHistory");
+            orderHistory.innerHTML = "";
+
+            if (orders.length === 0) {
+                orderHistory.innerHTML = "No orders placed yet.";
+                return;
+            }
+
+            orders.forEach((order, index) => {
+                let div = document.createElement("div");
+                div.classList.add("order-item");
+                div.innerHTML = `
+                    <img src="img/${order.image}" alt="${order.name}">
+                    <span>${order.name} - $${order.price}</span>
+                    <button class="btn" onclick="removeOrder(${index})">Cancel</button>
+                `;
+                orderHistory.appendChild(div);
+            });
+        }
+
+        function removeOrder(index) {
+            let orders = JSON.parse(localStorage.getItem("orders")) || [];
+            orders.splice(index, 1);
+            localStorage.setItem("orders", JSON.stringify(orders));
+            loadOrders();
+        }
+
+        document.addEventListener("DOMContentLoaded", loadOrders);
+    </script>
+</body>
+
+</html>

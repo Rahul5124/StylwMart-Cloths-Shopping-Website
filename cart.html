@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <link rel="icon" href="img/smlogo.png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: aliceblue;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            animation: slideInFromRight 0.5s ease-out;
+        }
+
+        @keyframes slideInFromRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .cart-container {
+            max-width: 800px;
+            margin: auto;
+            background: rgba(253, 249, 249, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #555;
+        }
+
+        .cart-container:hover {
+            transform: scale(1.003);
+            box-shadow: 6px 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #555;
+        }
+
+        .cart-item img {
+            width: 70px;
+            border-radius: 5px;
+        }
+
+        .btn {
+            background: #f7b347;
+            color: black;
+            padding: 10px 15px;
+            border: none;
+            text-decoration: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 30px;
+            box-shadow: 6px 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:hover {
+            background: #e79208;
+            box-shadow: 6px 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        span {
+            color: black;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-size: 1.2rem;
+        }
+
+        /* Order Popup Styles */
+        .order-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            text-align: left;
+            color: black;
+        }
+
+        .order-popup input,
+        .order-popup select {
+            width: 90%;
+            padding: 8px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 6px 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        p {
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <h2 style="color: black; font-family: Arial, Helvetica, sans-serif;">Shopping Cart</h2>
+    <div class="cart-container" id="cartContainer"></div>
+    <button class="btn" onclick="clearCart()">Clear Cart</button>
+    <a href="home.html" class="btn">Back to Home</a>
+
+    <!-- Order Details Popup -->
+    <div class="popup-overlay" id="popupOverlay"></div>
+    <div class="order-popup" id="orderPopup">
+        <h3>Enter Order Details</h3>
+        <input type="text" id="address" placeholder="Enter Address" required>
+        <input type="text" id="city" placeholder="Enter City" required>
+        <input type="text" id="pincode" placeholder="Enter Pincode" required>
+        <select id="paymentMethod">
+            <option value="COD">Cash on Delivery</option>
+            <option value="Card">Credit/Debit Card</option>
+            <option value="UPI">UPI</option>
+        </select>
+        <button class="btn" onclick="confirmOrder()">Confirm Order</button>
+        <button class="btn" onclick="closePopup()">Cancel</button>
+    </div>
+
+    <script>
+        let currentOrderIndex = null;
+
+        function loadCart() {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            let cartContainer = document.getElementById("cartContainer");
+            cartContainer.innerHTML = "";
+
+            if (cart.length === 0) {
+                cartContainer.innerHTML = "<p>Your cart is empty.</p>";
+                return;
+            }
+
+            cart.forEach((item, index) => {
+                let div = document.createElement("div");
+                div.classList.add("cart-item");
+                div.innerHTML = `
+                    <img src="img/${item.image}" alt="${item.name}" onclick="openProductPage('${item.image}')">
+                    <span>${item.name} - $${item.price}</span>
+                    <button class="btn" onclick="removeItem(${index})">Remove</button>
+                    <button class="btn" onclick="openPopup(${index})">Order Now</button>
+                `;
+                cartContainer.appendChild(div);
+            });
+        }
+
+        function openProductPage(image) {
+            window.location.href = `product.html?image=${image}`;
+        }
+        
+        function openPopup(index) {
+            currentOrderIndex = index;
+            document.getElementById("popupOverlay").style.display = "block";
+            document.getElementById("orderPopup").style.display = "block";
+        }
+
+        function closePopup() {
+            document.getElementById("popupOverlay").style.display = "none";
+            document.getElementById("orderPopup").style.display = "none";
+        }
+
+        function confirmOrder() {
+            let address = document.getElementById("address").value;
+            let city = document.getElementById("city").value;
+            let pincode = document.getElementById("pincode").value;
+            let paymentMethod = document.getElementById("paymentMethod").value;
+
+            if (!address || !city || !pincode) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+            let orderedProduct = {
+                ...cart[currentOrderIndex],
+                address, city, pincode, paymentMethod
+            };
+
+            orders.push(orderedProduct);
+            localStorage.setItem("orders", JSON.stringify(orders));
+
+            // Remove ordered product from cart
+            cart.splice(currentOrderIndex, 1);
+            localStorage.setItem("cart", JSON.stringify(cart));
+
+            alert("Order placed successfully!");
+
+            // Close popup and reload cart
+            closePopup();
+            loadCart();
+
+            // Redirect to orders page (optional)
+            window.location.href = "orders.html";
+        }
+
+        function removeItem(index) {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            cart.splice(index, 1);
+            localStorage.setItem("cart", JSON.stringify(cart));
+            loadCart();
+        }
+
+        function clearCart() {
+            localStorage.removeItem("cart");
+            loadCart();
+        }
+
+        document.addEventListener("DOMContentLoaded", loadCart);
+    </script>
+</body>
+
+</html>

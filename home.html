@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StyleMart</title>
+   <link rel="icon" href="img/smlogo.png">
+    <link rel="stylesheet" href="home.css">
+</head>
+<body>
+
+    
+    <section class="hero">
+        <div class="navbar">
+            <a href="login.html" class="login-button">Logout</a>
+        </div>
+        <div class="logo"><img src="img/bglogo.png" alt="StyleMart Logo"></div>
+        <div>
+        <h1 style="color: black;">Fashion for Everyone</h1>
+        <p style="color: black;">Discover the latest styles at unbeatable prices.</p>
+        <div class="search-bar"><input type="text"  id="search" placeholder="Search for products..."></div>
+        </div>
+    </section>
+    <!-- <hr style="width: 94%; height: 0.02px;"> -->
+    <!-- slider -->
+
+    <div class="slider-container">
+        <div class="slider">
+            <div class="slide"><img src="img/offer1.png" alt="Offer 1" onclick="location.href='all.html'"></div>
+            <div class="slide"><img src="img/offer3.png" alt="Offer 2" onclick="location.href='all.html'"></div>
+            <div class="slide"><img src="img/offer2.png" alt="Offer 3" onclick="location.href='all.html'"></div>
+            <div class="slide"><img src="img/offer4.png" alt="Offer 4" onclick="location.href='all.html'"></div>
+            <div class="slide"><img src="img/offer5.png" alt="Offer 5" onclick="location.href='all.html'"></div>
+            <div class="slide"><img src="img/offer6.png" alt="Offer 6" onclick="location.href='all.html'"></div>
+            <div class="slide"><img src="img/offer7.png" alt="Offer 7" onclick="location.href='all.html'"></div>
+            <div class="slide"><img src="img/offer8.png" alt="Offer 8" onclick="location.href='all.html'"></div>
+            <div class="slide"><img src="img/offer9.png" alt="Offer 9" onclick="location.href='all.html'"></div>
+        </div>
+
+        <!-- Navigation Arrows -->
+        <button class="prev" onclick="moveSlide(-1)">&#10094;</button>
+        <button class="next" onclick="moveSlide(1)">&#10095;</button>
+    </div>
+
+    <!-- Dots Navigation -->
+    <div class="dots">
+        <span class="dot" onclick="currentSlide(0)"></span>
+        <span class="dot" onclick="currentSlide(1)"></span>
+        <span class="dot" onclick="currentSlide(2)"></span>
+        <span class="dot" onclick="currentSlide(3)"></span>
+        <span class="dot" onclick="currentSlide(5)"></span>
+        <span class="dot" onclick="currentSlide(6)"></span>
+        <span class="dot" onclick="currentSlide(7)"></span>
+        <span class="dot" onclick="currentSlide(8)"></span>
+        <span class="dot" onclick="currentSlide(9)"></span>
+    </div>
+
+<!-- card.................... -->
+    <section class="card-container">
+        <div class="card"><img src="img/men.jpg" alt="Men's Collection" onclick="location.href='men.html'">Men's Collection</div>
+        <div class="card"><img src="img/women.jpg" alt="Women's Collection" onclick="location.href='women.html'">Women's Collection</div>
+        <div class="card"><img src="img/kids.jpg" alt="Kids' Collection" onclick="location.href='kid.html'">Kids' Collection</div>
+        <div class="card"><img src="img/all.jpeg" alt="All' Collection" onclick="location.href='all.html'">All Collection</div>
+    </section>
+
+    <h2 style="font-family: cursive; text-align: center;">Our Trending Cloths</h2>
+    <section class="card-container">
+        <div class="card"><img src="img/tred1.jpg" alt="Trending Product 1" onclick="openProductPage('tred1.jpg')">Trending Product 1</div>
+        <div class="card"><img src="img/tred2.jpg" alt="Trending Product 2" onclick="openProductPage('tred2.jpg')">Trending Product 2</div>
+        <div class="card"><img src="img/tred3.jpg" alt="Trending Product 3" onclick="openProductPage('tred3.jpg')">Trending Product 3</div>
+        <div class="card"><img src="img/tred4.jpg" alt="Trending Product 4" onclick="openProductPage('tred4.jpg')">Trending Product 4</div>
+    </section>
+    <hr style="width:94%;">
+    <section class="card-container">   
+        <div class="card"><img src="img/tred5.jpg" alt="Trending Product 5" onclick="openProductPage('tred5.jpg')">Trending Product 5</div>
+        <div class="card"><img src="img/tred6.jpg" alt="Trending Product 6" onclick="openProductPage('tred6.jpg')">Trending Product 6</div>
+        <div class="card"><img src="img/tred7.jpg" alt="Trending Product 7" onclick="openProductPage('tred7.jpg')">Trending Product 7</div>
+        <div class="card"><img src="img/tred8.jpg" alt="Trending Product 8" onclick="openProductPage('tred8.jpg')">Trending Product 8</div>
+        
+    </section>
+
+    <h2 style="font-family: cursive; text-align: center;">Customer`s Top Selection</h2>
+    <section class="card-container">
+        <div class="card"><img src="img/top3.jpg" alt="Top Pick 1" onclick="openProductPage('top3.jpg')">Top Pick 1</div>
+        <div class="card"><img src="img/top1.jpg" alt="Top Pick 2" onclick="openProductPage('top1.jpg')">Top Pick 2</div>
+        <div class="card"><img src="img/top4.jpg" alt="Top Pick 3" onclick="openProductPage('top4.jpg')">Top Pick 3</div>
+        <div class="card"><img src="img/top2.jpg" alt="Top Pick 4" onclick="openProductPage('top2.jpg')">Top Pick 4</div>
+    </section>
+    <div class="buttons">
+          <button class="opt" value="Chart" onclick="location.href='cart.html'">🛒Cart</button>
+          <button class="opt" value="Myorders" onclick="location.href='orders.html'">My Orders</button>
+          <button class="opt" onclick="toggleSettings()">⚙ Settings</button>
+          <div class="settings-container" id="settings">
+              <h3 class="theme">Select Theme</h3>
+              <select id="themeSelector" onchange="changeTheme()">
+                  <option value="light">Light Mode</option>
+                  <option value="dark">Dark Mode</option>
+              </select>
+          </div>
+          <button class="opt" value="Profile" onclick="location.href='profile.html'">👤 Profile</button>
+
+    </div>
+    <footer class = "footer__container">
+        <div class = "navigation_container" id="About">
+            <div class = "link_container">
+                <h5>About StyleMart</h5>
+                <div class = "link_container_anchors">
+                    <a href = "men.html">Mens Cloths</a>
+                    <a href = "women.html">Womens Cloths</a>
+                    <a href = "addp.html">Add Your Product</a>
+                    <a href = "">Report Fraud</a>
+                    <a href = "l">Contact Us</a>
+  
+                </div>
+            </div>
+            
+            <div class = "link_container">
+                <h5>Learn More</h5>
+                <div class = "link_container_anchors">
+                    <a href = "">Privacy</a>
+                    <a href = "">Security</a>
+                    <a href = "">Terms and Conditions</a>
+                    
+                </div>
+            </div>
+            <div class = "link_container">
+                <h5>Feedback</h5>
+                <div class = "link_container_anchors">
+                    <a href = "">Feedback and Rating</a>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class = "disclaimer">
+            Welcome to StyleMart, your ultimate fashion destination! We bring you the latest fashion trends,
+            top-quality outfits, and stylish collections to keep you looking your best. 
+            From casual wear to premium fashion, we have something for everyone.
+             Explore our collection and redefine your style with us
+        </div>
+    </footer>
+   <script src="home.js"></script>
+</body>
+</html>

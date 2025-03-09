@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Your Product</title>
+    <link rel="icon" href="img/smlogo.png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: aliceblue;
+            color: black;
+            text-align: center;
+            padding: 20px;
+            animation: slideInFromRight 0.5s ease-out;
+        }
+
+        @keyframes slideInFromRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .profile-container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 6px 6px 20px rgba(0, 0, 0, 0.3);
+            text-align: left;
+        }
+
+        .profile-container:hover {
+            transform: scale(1.01);
+        }
+
+        .profile-image {
+            display: block;
+            margin: auto;
+            width: 184px;
+            height: 180px;
+            border-radius: 50%;
+            border: 2px solid #555;
+        }
+
+        .btn {
+            background: #f7b347;
+            color: black;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: block;
+            width: 120px;
+            text-align: center;
+            margin-left: 45%;
+            box-shadow: 6px 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:hover {
+            background: #e79208;
+        }
+
+        .profile-input {
+            width: 25%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: row;
+            margin-left: 37%;
+            
+        }
+
+       
+       .profile-input:hover{
+        transform: scale(1.05);
+        box-shadow: 5px 10px 20px 5px rgba(0, 0, 0, 0.3);
+       }
+      
+
+    </style>
+</head>
+
+
+<body>
+   
+    <h2>Add Your Product</h2>
+    <form action="home.html" method="get">
+    <input type="text" class="profile-input" id="userName" placeholder="Shop Name" required>
+    <input type="text" class="profile-input" id="userName" placeholder="Product Name" required>
+    <input type="text" class="profile-input" id="userName" placeholder="Product Categoury e.g:men,women.." required>
+    <input type="text" class="profile-input" id="userName" placeholder="Brand Name" required>
+    <input type="text" class="profile-input" id="userName" placeholder="Contact No"required >
+    <input type="email" class="profile-input" id="userEmail" placeholder="Email" required>
+    <input type="text" class="profile-input" id="userName" placeholder="Description" required >
+    <input type="text" class="profile-input" id="userAddress" placeholder="Shop Address/Location" required>
+    <input type="file" id="uploadImage" class="profile-input" accept="image/*" onchange="changeProfileImage(event)" required>
+    <button class="btn" id="profileBtn">Add Shop</button>
+</form>
+    <button class="btn" id="profileBtn" onclick="location.href='home.html'" style="margin-bottom: 80px;">Back to Home</button>
+
+   
+
+
+
+</body>
+
+</html>
